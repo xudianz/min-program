@@ -1,0 +1,60 @@
+<template>
+  <div class="progressbar">
+    <progress :percent="percent" activeColor="#EA5A49" active/>
+    <p>{{year}}已经过去了{{days}}天，{{percent}}%</p>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {}
+  },
+  computed: {
+    year () {
+      return new Date().getFullYear()
+    },
+    days () {
+      let start = new Date()
+      start.setMonth(0)
+      start.setDate(1)
+      // start为今年第一天
+      let offset = new Date().getTime() - start.getTime()
+      return parseInt(offset / 1000 / 24 / 60 / 60) + 1
+    },
+    percent () {
+      return (this.days * 100 / this.getDayOfYear()).toFixed(1)
+    }
+  },
+  methods: {
+    isLeapYear () {
+      const year = new Date().getFullYear()
+      if (year % 400 === 0) {
+        return true
+      } else if (year % 4 === 0 && year % 100 !== 0) {
+        return true
+      } else {
+        return false
+      }
+    },
+    getDayOfYear () {
+      return this.isLeapYear() ? 366 : 365
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.progressbar {
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  p{
+    font-size: 16px;
+  }
+  progress {
+    margin-bottom: 10px;
+  }
+}
+</style>
